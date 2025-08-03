@@ -1,0 +1,77 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Virtual environments
+.venv
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific
+project_files/models/*.pkl
+project_files/models/*.json
+project_files/data/*.json
+*.log
+temp/
+tmp/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Development and testing
+.ruff_cache/
+mlruns/
+*.md
+!README.md
+
+# Documentation (not needed in production)
+project_files/documentation/
+
+# Linting and automation (not needed in production)
+project_files/linting/
+project_files/automation/
+
+# Monitoring logs
+project_files/logs/ 

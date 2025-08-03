@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  churn-api:
+    build: .
+    container_name: churn-prediction-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount models directory for persistence
+      - ./project_files/models:/app/project_files/models
+      # Mount data directory for access to dataset
+      - ./project_files/data:/app/project_files/data
+      # Mount logs directory
+      - ./project_files/logs:/app/project_files/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HOST=0.0.0.0
+      - PORT=8000
+      - ENVIRONMENT=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - churn-network
+
+  # Optional: Add a service for model training
+  model-trainer:
+    build: .
+    container_name: churn-model-trainer
+    volumes:
+      - ./project_files/models:/app/project_files/models
+      - ./project_files/data:/app/project_files/data
+      - ./project_files/logs:/app/project_files/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=training
+    command: ["uv", "run", "python", "project_files/src/customer_churn_prediction.py"]
+    profiles:
+      - training
+    networks:
+      - churn-network
+
+  # Optional: Add a service for monitoring
+  monitoring:
+    build: .
+    container_name: churn-monitoring
+    volumes:
+      - ./project_files/models:/app/project_files/models
+      - ./project_files/data:/app/project_files/data
+      - ./project_files/logs:/app/project_files/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=monitoring
+    command: ["uv", "run", "python", "project_files/monitoring/run_monitoring.py"]
+    profiles:
+      - monitoring
+    networks:
+      - churn-network
+
+networks:
+  churn-network:
+    driver: bridge 

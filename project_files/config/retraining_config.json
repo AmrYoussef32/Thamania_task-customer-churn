@@ -1,0 +1,15 @@
+{
+  "retraining_schedule": "weekly",
+  "performance_thresholds": {
+    "f1_min": 0.7,
+    "auc_min": 0.6,
+    "precision_min": 0.5,
+    "recall_min": 0.3
+  },
+  "drift_threshold": 0.2,
+  "data_path": "./project_files/data/customer_churn_mini.json",
+  "models_dir": "./project_files/models",
+  "backup_models": true,
+  "log_retraining": true,
+  "min_improvement": 0.02
+} 

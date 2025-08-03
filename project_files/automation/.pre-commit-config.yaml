@@ -1,0 +1,124 @@
+# Enhanced pre-commit configuration for Customer Churn Prediction
+# Automated quality checks and formatting
+
+repos:
+  # Ruff - Fast Python linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+        name: "Ruff linting and auto-fix"
+      - id: ruff-format
+        name: "Ruff formatting"
+
+  # Black - Code formatter
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3
+        name: "Black formatting"
+
+  # Mypy - Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.16.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-all]
+        args: [--ignore-missing-imports]
+        name: "Mypy type checking"
+
+  # Import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: "Import sorting"
+
+  # Security checks
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.8
+    hooks:
+      - id: bandit
+        args: [-r, project_files/src/]
+        name: "Security checks"
+
+  # Documentation checks
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.1
+    hooks:
+      - id: pydocstyle
+        args: [--convention=google]
+        name: "Docstring style"
+
+  # File hygiene
+  - repo: local
+    hooks:
+      - id: trailing-whitespace
+        name: "Remove trailing whitespace"
+        entry: --fix=warn
+        language: system
+        types: [text]
+
+      - id: end-of-file-fixer
+        name: "Ensure files end with newline"
+        language: system
+        types: [text]
+
+      - id: check-merge-conflict
+        name: "Check for merge conflicts"
+        entry: --fix=warn
+        language: system
+        types: [text]
+
+  # Custom hooks
+  - repo: local
+    hooks:
+      - id: check-sync-scripts
+        name: "Check sync scripts"
+        entry: bash -c 'echo "Checking sync scripts..." && ls -la sync_*.ps1'
+        language: system
+        pass_filenames: false
+
+      - id: check-project-structure
+        name: "Check project structure"
+        entry: bash -c 'echo "Checking project structure..." && ls -la project_files/'
+        language: system
+        pass_filenames: false
+
+# Global settings
+default_language_version:
+  python: python3
+
+# Hook execution order
+repos:
+  - repo: local
+    hooks:
+      - id: check-yaml
+        name: "YAML syntax check"
+        entry: yamllint
+        language: system
+        types: [yaml]
+
+      - id: check-json
+        name: "JSON syntax check"
+        entry: python -m json.tool
+        language: system
+        types: [json]
+
+# Exclude patterns
+exclude: |
+  (?x)^(
+      \.git|
+      \.venv|
+      __pycache__|
+      build|
+      dist|
+      \.eggs|
+      \.tox|
+      \.mypy_cache|
+      \.pytest_cache|
+      project_files/models|
+      project_files/data
+  )$ 

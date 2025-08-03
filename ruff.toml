@@ -1,0 +1,60 @@
+# Ruff configuration for Customer Churn Prediction project
+
+# Target Python version
+target-version = "py311"
+
+# Line length for formatting
+line-length = 88
+
+# Indent with spaces
+indent-width = 4
+
+# Quote style
+quote-style = "double"
+
+# Import sorting
+[lint.isort]
+known-first-party = ["project_files"]
+
+# Flake8 settings
+[lint.flake8]
+max-line-length = 88
+extend-ignore = [
+    "E501",  # Line too long (handled by black)
+    "E203",  # Whitespace before ':' (handled by black)
+    "W503",  # Line break before binary operator (handled by black)
+]
+
+# Pycodestyle settings
+[lint.pycodestyle]
+max-line-length = 88
+ignore = ["E501", "E203", "W503"]
+
+# Pyflakes settings
+[lint.pyflakes]
+ignore = []
+
+# Mypy settings
+[lint.mypy]
+python-version = "3.11"
+warn-return-any = true
+warn-unused-configs = true
+disallow-untyped-defs = true
+
+# Per-file rule exclusions
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["S101", "PLR2004"]
+"project_files/src/model_retraining/*" = ["E501", "PLR0913"]
+
+# Exclude patterns
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    "*.egg-info",
+    "project_files/models",
+    "project_files/data",
+] 
